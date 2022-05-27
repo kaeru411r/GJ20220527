@@ -17,15 +17,21 @@ public class PlayerController : MonoBehaviour
     [Tooltip("ジャンプ力"), SerializeField] private int _jumpPower = 5;
 
     [Header("ガード関連")]
-    [Tooltip("ガードの耐久値"), SerializeField] private int _shieldHp = 5;
+    [Tooltip("Shiftキー(ガードボタン)が押されたとき"), SerializeField] private GameObject _guardObject = default;
+    [Tooltip("反射する弾のオブジェクト"), SerializeField] private GameObject _reflectBullet = default;
+    [Tooltip("弾が発射される位置"), SerializeField] private Transform _muzzle = default;
+    [Tooltip("ガードの耐久値"), SerializeField] private int _guardHp = 5;
     [Tooltip("リフレクトの受付時間"), SerializeField] private int _reflectTime = 1;
+    [Tooltip("現在のガードの耐久値"), SerializeField] private int _currentGuardHp = 0;
+    [Tooltip("リフレクト用フラグ")] private bool _isReflect = false;
+    [Tooltip("ガード用フラグ")] private bool _isGuard = false;
+    [Tooltip("計測用")] private float _timer = 0f;
 
     [Tooltip("接地フラグ")] private bool _isGround = false;
-
     private float _h = 0f;
     private Rigidbody2D _rb;
 
-    public int PlayerHp { get => _playerHp; set => _playerHp = value; }
+    public int PlayerHp { get => _playerHp; }
 
     void Start()
     {
@@ -34,9 +40,22 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        _guardObject.SetActive(false);
+
+        //ジャンプ
         if (Input.GetButtonDown("Jump") && _isGround == true)
         {
             Jump();
+        }
+
+        //ガード
+        if (Input.GetButtonDown("Guard"))
+        {
+            _timer = 0f;
+        }
+        if (Input.GetButton("Guard"))
+        {
+            Guard();
         }
     }
     private void FixedUpdate()
@@ -52,6 +71,7 @@ public class PlayerController : MonoBehaviour
         // 移動
         // 入力を受け付ける
         float _h = Input.GetAxisRaw("Horizontal");
+
         // 右に入力した時
         if (_h > 0f)
         {
@@ -70,7 +90,68 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         _rb.AddForce(Vector2.up * _jumpPower, ForceMode2D.Impulse);
-        _isGround = false;
+    }
+
+    /// <summary>
+    /// 敵の弾が当たった時に呼ばれる関数
+    /// </summary>
+    public void Hit(int damage)
+    {
+        if (_isReflect == true)
+        {
+            Reflect();
+        }
+        else if (_isGuard == true)
+        {
+            if (_currentGuardHp > 0)
+            {
+                _currentGuardHp -= damage;
+                Debug.Log($"ガードの耐久値が{damage}減った");
+            }
+            else if (_currentGuardHp < 0)
+            {
+                _isGround = false;
+                Debug.Log("ガードの効果が切れた");
+            }
+        }
+        else
+        {
+            _playerHp -= damage;
+            Debug.Log($"プレイヤーが{damage}ダメージ受けた");
+        }
+    }
+
+    /// <summary>
+    /// 反射の処理
+    /// </summary>
+    private void Reflect()
+    {
+        Instantiate(_reflectBullet, _muzzle.position, Quaternion.identity);
+    }
+
+    /// <summary>
+    /// ガード時の処理
+    /// </summary>
+    private void Guard()
+    {
+        if (_currentGuardHp <= 0)
+        {
+            _currentGuardHp = _guardHp;
+        }
+        _guardObject.SetActive(true);
+
+        _timer += Time.deltaTime;
+        if (_timer < _reflectTime)
+        {
+            _isReflect = true;
+            Debug.Log("反射中");
+        }
+        else if(_currentGuardHp > 0)
+        {
+            _isReflect = false;
+            _isGuard = true;
+            Debug.Log($"ガード中、現在のガード耐久値は{_currentGuardHp}");
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -79,5 +160,10 @@ public class PlayerController : MonoBehaviour
         {
             _isGround = true;
         }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        _isGround = false;
     }
 }
