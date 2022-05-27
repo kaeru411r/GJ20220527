@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     static public GameManager Instance;
 
     /// <summary>åªç›É}ÉbÉvè„Ç…ë∂ç›Ç∑ÇÈEnemy</summary>
-    static public List<Enemy> Enemys
+    static public Enemy[] Enemys
     {
         get
         {
@@ -25,7 +25,8 @@ public class GameManager : MonoBehaviour
                     return null;
                 }
             }
-            return _enemys;
+            EnemyNullCheck();
+            return _enemys.ToArray();
         }
     }
 
@@ -104,6 +105,18 @@ public class GameManager : MonoBehaviour
         if (_enemys.Contains(e))
         {
             _enemys.Remove(e);
+        }
+    }
+
+    private static void EnemyNullCheck()
+    {
+        for(int i = 0; i < _enemys.Count; i++)
+        {
+            if(_enemys[i] == null)
+            {
+                _enemys.RemoveAt(i);
+                i--;
+            }
         }
     }
 }
