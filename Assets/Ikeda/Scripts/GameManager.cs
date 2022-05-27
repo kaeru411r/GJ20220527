@@ -23,4 +23,19 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    public void GameOvar()
+    {
+
+    }
+
+    public void GameStart()
+    {
+
+    }
+
+    public void GameClear()
+    {
+
+    }
 }
