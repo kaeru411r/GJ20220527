@@ -12,13 +12,13 @@ public class BaseBurret : MonoBehaviour
     /// <summary>
     /// ¶¬‚Ìˆ—
     /// </summary>
-    void SetUp()
+    protected void SetUp()
     {
         Destroy(gameObject, _deleteTime);
     }
 
-    /// <summary>’e‚Ìƒqƒbƒg‚Ì</summary>
-    void Hit()
+    /// <summary>’e‚Ìƒqƒbƒg‚Ìˆ—</summary>
+    protected void Hit()
     {
     }
 }
