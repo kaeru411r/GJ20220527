@@ -9,8 +9,24 @@ using System.Linq;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    static private GameManager _instance;
     /// <summary>現在のシーンのGameManager</summary>
-    static public GameManager Instance;
+    static public GameManager Instance
+    {
+        get
+        {
+            if(_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<GameManager>();
+                if( _instance == null)
+                {
+                    Debug.LogError($"{nameof(Instance)}が見つかりません");
+                    return null;
+                }
+            }
+            return _instance;
+        }
+    }
 
     /// <summary>現在マップ上に存在するEnemy</summary>
     static public Enemy[] Enemys
@@ -22,6 +38,7 @@ public class GameManager : MonoBehaviour
                 EnemyCollecting();
                 if(_enemys == null)
                 {
+                    Debug.LogError($"{nameof(Enemys)}が見つかりません");
                     return null;
                 }
             }
@@ -30,26 +47,41 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>現在シーンに存在するPlayer</summary>
+    static public PlayerController Player
+    {
+        get
+        {
+            if(_player == null)
+            {
+                _player = GameObject.FindObjectOfType<PlayerController>();
+                if (Player == null)
+                {
+                    Debug.LogError($"{nameof(Player)}が見つかりません");
+                    return null;
+                }
+            }
+            return _player;
+        }
+    }
+
+
     /// <summary>現在マップ上に存在するEnemy</summary>
     static private List<Enemy> _enemys;
+    /// <summary>現在シーンに存在するPlayer</summary>
+    static private PlayerController _player;
 
 
     private void Awake()
     {
-        Instance = this;
+        if (_instance)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        _instance = this;
         EnemyCollecting();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    private void Update()
-    {
-        
+        _player = FindObjectOfType<PlayerController>();
     }
 
     /// <summary>
@@ -57,7 +89,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameOvar()
     {
-
+        SceneManager.Instance.Playback();
     }
 
     /// <summary>
@@ -73,8 +105,9 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameClear()
     {
-
+        SceneManager.Instance.Playback();
     }
+
 
     /// <summary>
     /// シーン上のEnemyを_enemysに代入
