@@ -8,8 +8,8 @@ public class GameManager : MonoBehaviour
 
     static public GameManager Instance;
 
-    static Enemy[] _enemys;
-    static public Enemy[] Enemys
+    static private List<Enemy> _enemys;
+    static public List<Enemy> Enemys
     {
         get
         {
@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }
@@ -59,9 +59,24 @@ public class GameManager : MonoBehaviour
 
     }
 
-    static void EnemyCollecting()
+    static private void EnemyCollecting()
     {
-        List<Enemy> list = new List<Enemy>();
-        _enemys = GameObject.FindObjectsOfType<Enemy>();
+        _enemys = GameObject.FindObjectsOfType<Enemy>().ToList();
+    }
+
+    static public void AddEnemy(Enemy e)
+    {
+        if (!_enemys.Contains(e))
+        {
+            _enemys.Add(e);
+        }
+    }
+
+    static public void RemoveEnemy(Enemy e)
+    {
+        if (_enemys.Contains(e))
+        {
+            _enemys.Remove(e);
+        }
     }
 }
