@@ -11,9 +11,9 @@ public class EnemyShoot : MonoBehaviour
     public GameObject EnemyBarrett;
 
     //一秒ごとに弾を発射するためのもの
-    private float _targetTime = 1.0f;
-    private float _currentTime = 0;
-    private float _enemyBarrettspeed = 10.0f;
+    [SerializeField] private float _targetTime = default;
+    [SerializeField] private float _currentTime = default;
+    [SerializeField] private float _enemyBarrettspeed = default;
     // Update is called once per frame
     void Update()
     {
@@ -32,7 +32,7 @@ public class EnemyShoot : MonoBehaviour
             //プレイヤーの位置から敵の位置（弾の位置）を引く
             Vector2 vector = Player.transform.position - position;
             //弾のRigidBody2Dコンポネントのvelocityに先程求めたベクトルを入れて力を加える
-            t.GetComponent<Rigidbody2D>().velocity = vector;
+            t.GetComponent<Rigidbody2D>().velocity = vector * _enemyBarrettspeed;
         }
     }
 }
