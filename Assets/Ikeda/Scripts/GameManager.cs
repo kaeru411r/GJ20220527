@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
     public void GameClear()
     {
         _gameClearText.SetActive(true);
-        StartCoroutine(GameOvar(_waitTime2));
+        StartCoroutine(GameClear(_waitTime2));
     }
 
 
