@@ -19,6 +19,10 @@ public class Bullett3 : BaseBurret
             Hit();
             Destroy(this.gameObject);
         }
+        else if (collision.CompareTag("Enemy"))
+        {
+
+        }
         else
         {
             Destroy(this.gameObject);
