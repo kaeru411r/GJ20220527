@@ -4,12 +4,15 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 
+/// <summary>
+/// シーンの繊維を管理するコンポーネント
+/// </summary>
 public class SceneManager : SingletonMonoBehaviour<SceneManager>
 {
     /// <summary>タイトルシーン</summary>
-    private Scene _titleScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(0);
-
-    private Scene _resultScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(1);
+    private Scene _titleScene;
+    /// <summary>リザルトシーン</summary>
+    private Scene _resultScene;
 
     /// <summary>現在のシーン</summary>
     private Scene _nowScene;
@@ -17,6 +20,8 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     private void Awake()
     {
         base.Awake();
+        _titleScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(0);
+        _resultScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(1);
         _nowScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
     }
 
@@ -25,7 +30,7 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// </summary>
     public void Playback()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_nowScene.name);
+        SceneChange(_nowScene.buildIndex);
     }
 
     /// <summary>
@@ -33,7 +38,7 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// </summary>
     public void NextScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_nowScene.buildIndex + 1);
+        SceneChange(_nowScene.buildIndex + 1);
     }
 
     /// <summary>
@@ -41,7 +46,7 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// </summary>
     public void Title()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_titleScene.name);
+        SceneChange(_titleScene.buildIndex);
     }
 
     /// <summary>
@@ -49,14 +54,28 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// </summary>
     public void Result()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_resultScene.name);
+        SceneChange(_resultScene.buildIndex);
     }
 
+    /// <summary>
+    /// 指定したシーンに移動
+    /// </summary>
+    /// <param name="value"></param>
     public void Optionally(int value)
     {
         int count = UnityEngine.SceneManagement.SceneManager.sceneCount;
-        value = Mathf.Min(value, count);
-        value = Mathf.Max(value, 0);
-        UnityEngine.SceneManagement.SceneManager.LoadScene(value);
+        value = Mathf.Min(value, count - 1);
+        value = Mathf.Max(value, 0); 
+        SceneChange(value);
+    }
+
+    /// <summary>
+    /// シーンを遷移
+    /// </summary>
+    /// <param name="num"></param>
+    void SceneChange(int num)
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(num);
+        _nowScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
     }
 }
