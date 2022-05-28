@@ -5,7 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Ikeda/Master/Title 1.unity
+    guid: dcf68d8012993b7408f8a7058b5049fe
+  - enabled: 1
+    path: Assets/Ikeda/Master/Result.unity
+    guid: 585d4b6eec124c140a202c40bbde580e
+  - enabled: 1
+    path: Assets/Ikeda/Master/Clear.unity
+    guid: b40c573c3670e4a4d8cc212b9d64b3c6
+  - enabled: 1
+    path: Assets/Ikeda/Master/map 1.unity
+    guid: 811185cb000b9084e87ac7da08c397f4
   m_configObjects: {}

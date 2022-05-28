@@ -22,9 +22,11 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     private void Awake()
     {
         base.Awake();
-        _titleScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(0);
-        _resultScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(1);
-        _clearScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(2);
+        int count = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
+        Debug.Log(count);
+        _titleScene = UnityEngine.SceneManagement.SceneManager.GetSceneByBuildIndex(0);
+        _resultScene = UnityEngine.SceneManagement.SceneManager.GetSceneByBuildIndex(1);
+        _clearScene = UnityEngine.SceneManagement.SceneManager.GetSceneByBuildIndex(2);
         _nowScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
     }
 
@@ -71,7 +73,7 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// <param name="value"></param>
     public void Optionally(int value)
     {
-        int count = UnityEngine.SceneManagement.SceneManager.sceneCount;
+        int count = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
         value = Mathf.Min(value, count - 1);
         value = Mathf.Max(value, 0); 
         SceneChange(value);
