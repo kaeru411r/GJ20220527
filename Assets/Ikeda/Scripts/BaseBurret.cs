@@ -20,5 +20,6 @@ public class BaseBurret : MonoBehaviour
     /// <summary>’e‚Ìƒqƒbƒg‚Ìˆ—</summary>
     protected void Hit()
     {
+        GameManager.Player.Hit(_damage);
     }
 }
