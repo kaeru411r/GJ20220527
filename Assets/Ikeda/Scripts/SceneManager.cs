@@ -7,9 +7,9 @@ using UnityEditor;
 public class SceneManager : SingletonMonoBehaviour<SceneManager>
 {
     /// <summary>タイトルシーン</summary>
-    private Scene _titleScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(0);
+    private Scene _titleScene;
 
-    private Scene _resultScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(1);
+    private Scene _resultScene;
 
     /// <summary>現在のシーン</summary>
     private Scene _nowScene;
@@ -17,6 +17,8 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     private void Awake()
     {
         base.Awake();
+        _titleScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(0);
+        _resultScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(1);
         _nowScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
     }
 
@@ -25,7 +27,7 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// </summary>
     public void Playback()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_nowScene.name);
+        SceneChange(_nowScene.buildIndex);
     }
 
     /// <summary>
@@ -33,7 +35,7 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// </summary>
     public void NextScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_nowScene.buildIndex + 1);
+        SceneChange(_nowScene.buildIndex + 1);
     }
 
     /// <summary>
@@ -41,7 +43,7 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// </summary>
     public void Title()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_titleScene.name);
+        SceneChange(_titleScene.buildIndex);
     }
 
     /// <summary>
@@ -49,14 +51,20 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     /// </summary>
     public void Result()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_resultScene.name);
+        SceneChange(_resultScene.buildIndex);
     }
 
     public void Optionally(int value)
     {
         int count = UnityEngine.SceneManagement.SceneManager.sceneCount;
         value = Mathf.Min(value, count);
-        value = Mathf.Max(value, 0);
-        UnityEngine.SceneManagement.SceneManager.LoadScene(value);
+        value = Mathf.Max(value, 0); 
+        SceneChange(value);
+    }
+
+    void SceneChange(int num)
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(num);
+        _nowScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
     }
 }
