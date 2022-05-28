@@ -9,6 +9,10 @@ using System.Linq;
 /// </summary>
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] float _waitTime;
+    [SerializeField] float _waitTime2;
+    [SerializeField] GameObject _gameOverText;
+    [SerializeField] GameObject _gameClearText;
     static private GameManager _instance;
     /// <summary>åªç›ÇÃÉVÅ[ÉìÇÃGameManager</summary>
     static public GameManager Instance
@@ -89,7 +93,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameOvar()
     {
-        SceneManager.Instance.Playback();
+        _gameOverText.SetActive (true);
+        StartCoroutine(GameOvar(_waitTime));
     }
 
     /// <summary>
@@ -105,7 +110,8 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void GameClear()
     {
-        SceneManager.Instance.Playback();
+        _gameClearText.SetActive(true);
+        StartCoroutine(GameOvar(_waitTime2));
     }
 
 
@@ -155,4 +161,21 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+
+    IEnumerator GameOvar(float tim)
+    {
+        yield return new WaitForSeconds(tim);
+        SceneManager.Instance.Playback();
+    }
+
+    IEnumerator GameClear(float tim)
+    {
+        yield return new WaitForSeconds(tim);
+        SceneManager.Instance.Playback();
+    }
+
+
+
+
 }
+
