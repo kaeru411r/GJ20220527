@@ -54,14 +54,22 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
         SceneChange(_resultScene.buildIndex);
     }
 
+    /// <summary>
+    /// 指定したシーンに移動
+    /// </summary>
+    /// <param name="value"></param>
     public void Optionally(int value)
     {
         int count = UnityEngine.SceneManagement.SceneManager.sceneCount;
-        value = Mathf.Min(value, count);
+        value = Mathf.Min(value, count - 1);
         value = Mathf.Max(value, 0); 
         SceneChange(value);
     }
 
+    /// <summary>
+    /// シーンを遷移
+    /// </summary>
+    /// <param name="num"></param>
     void SceneChange(int num)
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene(num);
