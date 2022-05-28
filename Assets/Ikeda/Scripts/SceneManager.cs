@@ -4,11 +4,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEditor;
 
+/// <summary>
+/// シーンの繊維を管理するコンポーネント
+/// </summary>
 public class SceneManager : SingletonMonoBehaviour<SceneManager>
 {
     /// <summary>タイトルシーン</summary>
     private Scene _titleScene;
-
+    /// <summary>リザルトシーン</summary>
     private Scene _resultScene;
 
     /// <summary>現在のシーン</summary>

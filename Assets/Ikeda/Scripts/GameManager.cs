@@ -141,6 +141,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// _enemys‚Énull‚ª–³‚¢‚©Šm‚©‚ßA‚ ‚Á‚½‚çÁ‚·
+    /// </summary>
     private static void EnemyNullCheck()
     {
         for(int i = 0; i < _enemys.Count; i++)
