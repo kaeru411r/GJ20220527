@@ -1,33 +1,75 @@
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!1 &8056918037162028743
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1722310447967356530}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1722310447967356530
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8056918037162028743}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+ 
+public class EnemyShot : MonoBehaviour
+{
+    public GameObject shellPrefab;
+    public AudioClip sound;
+    private int count;
+ 
+    void Update()
+    {
+        count += 1;
+ 
+        // （ポイント）
+        // ６０フレームごとに砲弾を発射する
+        if(count % 60 == 0)
+        {
+            GameObject shell = Instantiate(shellPrefab, transform.position, Quaternion.identity);
+            Rigidbody shellRb = shell.GetComponent<Rigidbody>();
+ 
+            // 弾速は自由に設定
+            shellRb.AddForce(transform.forward * 500);
+ 
+            // 発射音を出す
+            AudioSource.PlayClipAtPoint(sound, transform.position);
+ 
+            // ５秒後に砲弾を破壊する
+            Destroy(shell, 5.0f);
+        }
+    }
+}
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Enemybullet : MonoBehaviour
+{
+GameObject Player;
+// public Transform Enemybullet;
+
+public float speed = 3.0f;  // 移動スピード]
+
+public Vector3 PlayerPos { get; private set; }
+
+
+// Start is called before the first frame update
+void Start()
+{
+    // playerオブジェクトを取得
+    this.Player = GameObject.Find("Player");
+    GetComponent<Rigidbody2D>().velocity
+      = new Vector2(0, speed);
+
+    Destroy(gameObject, 3.0f);
+
+    Vector3 PlayerPos = this.Player.transform.position;
+
+}
+                                                                                              
+// Update is called once per frame
+void Update()
+{
+    
+    // float step = speed * Time.deltaTime;
+    //Enemybullet.transform.position = Vector3.MoveTowards(Enemybullet.transform.position, Player.transform.position,step);
+
+    float ENEMY_MOVE_SPEED = 0.05f;
+  
+    // プレイヤーの方向に移動させる
+    transform.position = Vector3.MoveTowards(transform.position, PlayerPos, ENEMY_MOVE_SPEED);
+    
+}
+}
