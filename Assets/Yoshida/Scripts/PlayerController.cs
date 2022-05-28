@@ -33,10 +33,15 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rb;
     Vector2 _scale;
 
+    Animator _anim = default;
+    bool _isMove = false;
+    bool _isJump = false;
+    bool _isDead = false;
     public int PlayerHp { get => _playerHp; }
 
     void Start()
     {
+        _anim = GetComponent<Animator>();
         _rb = GetComponent<Rigidbody2D>();
         _scale.x = this.transform.localScale.x; // ここで scale (向き)を保持しておく。
     }
@@ -55,14 +60,27 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Guard"))
         {
             _timer = 0f;
+            _currentGuardHp = _guardHp;
         }
         if (Input.GetButton("Guard"))
         {
             Guard();
         }
+        if (Input.GetButtonUp("Guard"))
+        {
+            _currentGuardHp = _guardHp;
+        }
     }
     private void FixedUpdate()
     {
+        // Animator関連
+        if (_anim)
+        {
+            _anim.SetBool("PlayerMove", _isMove);
+            _anim.SetBool("PlayerJump", _isJump);
+            _anim.SetBool("PlayerDead", _isDead);
+        }
+
         Move();
     }
 
@@ -76,7 +94,15 @@ public class PlayerController : MonoBehaviour
         float _h = Input.GetAxisRaw("Horizontal");
         var scale = gameObject.transform.localScale;
         
-
+        if(_h != 0f)
+        {
+            _isMove = true;
+        }
+        else
+        {
+            _isMove= false;
+        }
+        
         // 右に入力した時
         if (_h > 0f)
         {
@@ -100,6 +126,7 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         _rb.AddForce(Vector2.up * _jumpPower, ForceMode2D.Impulse);
+        _isJump = true;
     }
 
     /// <summary>
@@ -118,15 +145,20 @@ public class PlayerController : MonoBehaviour
                 _currentGuardHp -= damage;
                 Debug.Log($"ガードの耐久値が{damage}減った");
             }
-            else if (_currentGuardHp < 0)
+            else if (_currentGuardHp <= 0)
             {
-                _isGround = false;
+                _isGuard = false;
                 Debug.Log("ガードの効果が切れた");
             }
         }
         else
         {
             _playerHp -= damage;
+            _isDead = true;
+            if(PlayerHp <= 0)
+            {
+                GameManager.Instance.GameOvar();
+            }
             Debug.Log($"プレイヤーが{damage}ダメージ受けた");
         }
     }
@@ -155,10 +187,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Guard()
     {
-        if (_currentGuardHp <= 0)
-        {
-            _currentGuardHp = _guardHp;
-        }
         _guardObject.SetActive(true);
 
         _timer += Time.deltaTime;
@@ -180,6 +208,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             _isGround = true;
+            _isJump = false;
         }
     }
 
