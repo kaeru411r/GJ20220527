@@ -11,35 +11,27 @@ public class ReflectBulletController : MonoBehaviour
     [Tooltip("íeÇÃë¨Ç≥"), SerializeField] private int _moveSpeed = 10;
     [Tooltip("íeÇÃçUåÇóÕ"), SerializeField] private int _power = 1;
     [Tooltip("íeÇÃê∂ë∂éûä‘"), SerializeField] private int _bulletLifeTime = 3;
-    [Tooltip("åvë™óp")] private float _timer = 0;
 
+    Enemy _enemy = default;
     Rigidbody2D _rb;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
         _rb.velocity = Vector2.right * _moveSpeed;
-    }
-
-    private void Update()
-    {
-        _timer += Time.deltaTime;
-
-        if(_timer > _bulletLifeTime)
-        {
-            Destroy(this);
-        }
+        Destroy(gameObject, _bulletLifeTime);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if(collision.gameObject.CompareTag("Enemy"))
         {
+            _enemy.Damage(_power);
             Destroy(this);
         }
-        else if (collision.gameObject.CompareTag("Enemy"))
+        else
         {
-
+            Destroy(this);
         }
     }
 }
