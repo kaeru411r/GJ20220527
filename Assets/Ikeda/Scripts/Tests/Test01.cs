@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Test01 : MonoBehaviour
 {
-    Enemy[] es = GameManager.Enemys;
+    Enemy[] es;
     // Start is called before the first frame update
     void Start()
     {
+        es = GameManager.Enemys;
         foreach(var e in es)
         {
             Debug.Log(e);
@@ -28,12 +29,5 @@ public class Test01 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        es = GameManager.Enemys;
-        Debug.Log("");
-        foreach (var e in es)
-        {
-            Debug.Log(e);
-        }
     }
 }
