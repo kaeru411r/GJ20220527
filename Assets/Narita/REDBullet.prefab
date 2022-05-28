@@ -147,6 +147,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _deleteTime: 5
-  _damage: 5
+  _damage: 1
   m_speed: 2.5
-  m_lifeTime: 1
