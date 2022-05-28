@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("ガード関連")]
     [Tooltip("Shiftキー(ガードボタン)が押されたとき"), SerializeField] private GameObject _guardObject = default;
-    [Tooltip("反射する弾のオブジェクト"), SerializeField] private GameObject _reflectBulletPrefab = default;
+    [Tooltip("反射する弾のオブジェクト"), SerializeField] private ReflectBulletController _reflectBullet = default;
     [Tooltip("弾が発射される位置"), SerializeField] private Transform _muzzle = default;
     [Tooltip("ガードの耐久値"), SerializeField] private int _guardHp = 5;
     [Tooltip("リフレクトの受付時間"), SerializeField] private int _reflectTime = 1;
@@ -28,21 +28,22 @@ public class PlayerController : MonoBehaviour
     [Tooltip("計測用")] private float _timer = 0f;
 
     [Tooltip("接地フラグ")] private bool _isGround = false;
+    [Tooltip("左右どっちをを向いているかどうかのフラグ")] bool isRight = false;
     private float _h = 0f;
     private Rigidbody2D _rb;
+    Vector2 _scale;
 
     public int PlayerHp { get => _playerHp; }
 
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
-        
+        _scale.x = this.transform.localScale.x; // ここで scale (向き)を保持しておく。
     }
 
     private void Update()
     {
         _guardObject.SetActive(false);
-
 
         //ジャンプ
         if (Input.GetButtonDown("Jump") && _isGround == true)
@@ -73,22 +74,24 @@ public class PlayerController : MonoBehaviour
         // 移動
         // 入力を受け付ける
         float _h = Input.GetAxisRaw("Horizontal");
-        Vector3 scale = this.transform.localScale;
+        var scale = gameObject.transform.localScale;
         
 
         // 右に入力した時
         if (_h > 0f)
         {
             _rb.velocity = new Vector2(_moveSpeed, _rb.velocity.y);
-            scale.x = 1;
+            scale.x = _scale.x;
+            isRight = true;
         }
         // 左に入力した時
         else if (_h < 0f)
         {
             _rb.velocity = new Vector2(-_moveSpeed, _rb.velocity.y);
-            scale.x = -1;
+            scale.x = _scale.x * -1;
+            isRight = false;
         }
-        scale = transform.localScale;
+        gameObject.transform.localScale = scale;
     }
 
     /// <summary>
@@ -142,7 +145,9 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private void Reflect()
     {
-        Instantiate(_reflectBulletPrefab, _muzzle.position, Quaternion.identity);
+        var go = Instantiate(_reflectBullet, _muzzle.position, Quaternion.identity);
+        go.GetComponent<ReflectBulletController>();
+        go.Bullet(isRight);
     }
 
     /// <summary>

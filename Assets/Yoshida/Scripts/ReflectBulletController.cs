@@ -17,14 +17,26 @@ public class ReflectBulletController : MonoBehaviour
 
     private void Start()
     {
-        _rb = GetComponent<Rigidbody2D>();
-        _rb.velocity = Vector2.right * _moveSpeed;
         Destroy(gameObject, _bulletLifeTime);
+    }
+
+    /// <summary>
+    /// íeÇÃî≠éÀÇèàóùÇ∑ÇÈä÷êî
+    /// </summary>
+    public void Bullet(bool isRight)
+    {
+        int n = -1;
+        if (isRight)
+        {
+            n = 1;
+        }
+        _rb = GetComponent<Rigidbody2D>();
+        _rb.velocity = Vector2.right * _moveSpeed * n;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             _enemy.Damage(_power);
             Destroy(this);
