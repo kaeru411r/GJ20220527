@@ -13,6 +13,8 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     private Scene _titleScene;
     /// <summary>リザルトシーン</summary>
     private Scene _resultScene;
+    /// <summary>全クリシーン</summary>
+    private Scene _clearScene;
 
     /// <summary>現在のシーン</summary>
     private Scene _nowScene;
@@ -22,6 +24,7 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
         base.Awake();
         _titleScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(0);
         _resultScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(1);
+        _clearScene = UnityEngine.SceneManagement.SceneManager.GetSceneAt(2);
         _nowScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
     }
 
@@ -55,6 +58,11 @@ public class SceneManager : SingletonMonoBehaviour<SceneManager>
     public void Result()
     {
         SceneChange(_resultScene.buildIndex);
+    }
+
+    public void Clear()
+    {
+        SceneChange(_clearScene.buildIndex);
     }
 
     /// <summary>
