@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] int _enemyDamage;
     [SerializeField] int _enemyHp;
     public void Damage(int damage)
     {
@@ -11,6 +12,14 @@ public class Enemy : MonoBehaviour
         if(_enemyHp <= 0 )
         {
             Death();
+        }
+
+    }
+    public void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag ("Player"))
+        {
+            GameManager.Player.HitEnemy(_enemyDamage);
         }
     }
     private void Death()
