@@ -145,11 +145,6 @@ public class PlayerController : MonoBehaviour
                 _currentGuardHp -= damage;
                 Debug.Log($"ガードの耐久値が{damage}減った");
             }
-            else if (_currentGuardHp <= 0)
-            {
-                _isGuard = false;
-                Debug.Log("ガードの効果が切れた");
-            }
         }
         else
         {
@@ -200,6 +195,11 @@ public class PlayerController : MonoBehaviour
             _isReflect = false;
             _isGuard = true;
             Debug.Log($"ガード中、現在のガード耐久値は{_currentGuardHp}");
+        }
+        if (_currentGuardHp <= 0)
+        {
+            _isGuard = false;
+            Debug.Log("ガードの効果が切れた");
         }
     }
 
