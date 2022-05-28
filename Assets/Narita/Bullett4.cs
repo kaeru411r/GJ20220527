@@ -15,9 +15,10 @@ public class Bullett4 : BaseBurret
     {
         SetUp();
     }
-    public void OnCollisionEnter2D(Collision2D other)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             Hit();
             Destroy(this.gameObject);
