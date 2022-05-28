@@ -38,7 +38,8 @@ public class ReflectBulletController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            _enemy.Damage(_power);
+            var e = collision.GetComponent<Enemy>();
+            e.Damage(_power);
             Destroy(this);
         }
         else
