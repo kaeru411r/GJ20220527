@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4301691582778980616}
   - component: {fileID: 4301691582778980617}
   - component: {fileID: 4301691582778980086}
-  - component: {fileID: 4301691582778980087}
+  - component: {fileID: -1883354116369439720}
   m_Layer: 0
   m_Name: GREENBullet
   m_TagString: Bullet
@@ -134,7 +134,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4301691582778980087
+--- !u!114 &-1883354116369439720
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -143,10 +143,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4301691582778980618}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db6e4d249eb6084eb8d18aa302a4541, type: 3}
+  m_Script: {fileID: 11500000, guid: 57ea751ee305c1b48804fc0b74263e58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _deleteTime: 5
-  _damage: 5
-  m_speed: 0
-  m_lifeTime: 1
+  _damage: 2
+  m_speed: 3
